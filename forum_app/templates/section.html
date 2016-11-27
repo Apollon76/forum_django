@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ section.name }}</title>
+</head>
+<body>
+    {% for thread in section.threads.all %}
+        <a href="{{ thread.id }}">{{ thread.name }}</a><br>
+    {% endfor %}
+</body>
+</html>
