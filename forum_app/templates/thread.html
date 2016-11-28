@@ -5,14 +5,16 @@
     <title>{{ thread.name }}</title>
 </head>
 <body>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ post_form }}
-        <input type="submit" value="Submit" />
-    </form>
+    {% if user.is_authenticated %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ post_form }}
+            <input type="submit" value="Submit" />
+        </form>
+    {% endif %}
     {% for post in thread.posts.all %}
-        <a>post.author.username</a><br>
-        <a>post.data</a><br>
+        <a>{{ post.author.username }}</a><br>
+        <a>{{ post.data }}</a><br>
     {% endfor %}
 </body>
 </html>

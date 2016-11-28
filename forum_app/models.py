@@ -1,20 +1,9 @@
 from django.db import models
-
-
-class User(models.Model):
-    nickname = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
-    registration_date = models.DateTimeField()
-    registration_date.null = True
-    is_admin = models.BooleanField(default=False)
-    email = models.CharField(null=False, max_length=30)
-
-    def __str__(self):
-        return self.nickname
+import django.contrib.auth.models
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(django.contrib.auth.models.User, on_delete=models.SET_NULL, null=True)
     data = models.CharField(max_length=100000)
 
 

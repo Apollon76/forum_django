@@ -4,8 +4,8 @@ from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import RegistrationForm, LoginForm
-from .models import Section, Thread
+from .forms import RegistrationForm, LoginForm, PostForm
+from .models import Section, Thread, Post
 
 
 def index(request):
@@ -55,4 +55,10 @@ def section_view(request, id):
 
 def thread_view(request, section_id, thread_id):
     cur_thread = Thread.objects.get(pk=thread_id)
-    return render(request, 'thread.html', {'thread': cur_thread})
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated():
+            new_message = Post(data=form.cleaned_data['data'], author=request.user)
+            new_message.save()
+            cur_thread.posts.add(new_message)
+    return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm()})

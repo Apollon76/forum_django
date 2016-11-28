@@ -6,6 +6,11 @@ class RegistrationForm(forms.Form):
     password = forms.CharField(label='Password', max_length=30, widget=forms.PasswordInput())
     email = forms.EmailField(label='E-mail', max_length=30)
 
+
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', max_length=30)
     password = forms.CharField(label='Password', max_length=30, widget=forms.PasswordInput())
+
+
+class PostForm(forms.Form):
+    data = forms.CharField(label='Message')
