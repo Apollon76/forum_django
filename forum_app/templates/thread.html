@@ -16,4 +16,10 @@
             <a href="{{ post.id }}/delete_post/">del</a><br>
         {% endif %}
     {% endfor %}
+    {% if cur_page > 0 %}
+        <a href="?page={{ cur_page|add:'-1' }}">Назад</a>
+    {% endif %}
+    {% if cur_page < max_page %}
+        <a href="?page={{ cur_page|add:'1' }}">Вперёд</a>
+    {% endif %}
 {% endblock %}

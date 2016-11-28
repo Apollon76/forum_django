@@ -1,3 +1,5 @@
+from math import ceil
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -88,7 +90,15 @@ def post_message(request, section_id, thread_id):
 def thread_view(request, section_id, thread_id):
     cur_thread = Thread.objects.get(pk=thread_id)
     posts_on_page = cur_thread.posts.all().order_by('-id')
-    return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(), 'posts': posts_on_page})
+    cur_page = 0
+    if 'page' in request.GET:
+        cur_page = int(request.GET['page'])
+    posts_number = 10
+    max_page = (len(posts_on_page) - 1) // posts_number
+    max_page = max(max_page, 0)
+    return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(),
+                                           'posts': posts_on_page[posts_number * cur_page:min(len(posts_on_page), posts_number * (cur_page + 1))],
+                                           'cur_page': cur_page, 'max_page': max_page})
 
 
 @login_required(login_url='/forum_app/login')
