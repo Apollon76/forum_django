@@ -6,7 +6,7 @@
         {% csrf_token %}
         {{ thread_form }}
         {{ post_form }}
-        <input type="submit" value="Создать" />
+        <button type="submit" class="btn btn-success">Создать</button>
     </form>
     {% csrf_token %}
     <a>{{ error_message }}</a><br>

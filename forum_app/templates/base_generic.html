@@ -3,16 +3,51 @@
 <head>
     <meta charset="UTF-8">
     {% load staticfiles %}
-    <!--<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel=stylesheet>-->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel=stylesheet>
+    <style>
+        body {
+          padding-top: 60px;
+          padding-bottom: 20px;
+        }
+    </style>
     <title>{%  block title %}{% endblock %}</title>
 </head>
 <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">Форум</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            {% if user.is_authenticated %}
+                <form class="navbar-form navbar-right" action="{% url 'logout' %}">
+                    <button type="submit" class="btn btn-success navbar-right">Выйти</button>
+                </form>
+            {% else %}
+                <form class="navbar-form navbar-right" action="{% url 'login' %}">
+                    <button type="submit" class="btn btn-success navbar-right">Войти</button>
+                </form>
+                 <form class="navbar-form navbar-right" action="{% url 'registration' %}">
+                    <button type="submit" class="btn btn-success navbar-right">Регистрация</button>
+                </form>
+            {% endif %}
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+
     <footer class="footer">
       <div class="container">
-          <a href="/forum_app">На главную</a><br>
+          <a href="{% url 'index' %}">На главную</a><br>
           <!--<p class="text-muted">Place sticky footer content here.</p>-->
       </div>
     </footer>
