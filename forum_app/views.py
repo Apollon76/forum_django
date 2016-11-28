@@ -20,9 +20,8 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            new_user = User(username=form_data['nickname'], password=form_data['password'], email=form_data['email'],
-                            is_staff=False)
             if not User.objects.filter(username=form.cleaned_data['nickname']).exists():
+                new_user = User.objects.create_user(form_data['nickname'], form_data['email'], form_data['password'])
                 new_user.save()
                 return HttpResponseRedirect('../')
             else:
