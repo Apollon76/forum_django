@@ -2,6 +2,9 @@
 
 {% block title %}{{ section.name }}{% endblock %}
 {% block content %}
+    {% if user.is_authenticated %}
+        <a href="new_thread/">Создать нову тему</a><br>
+    {% endif %}
     {% for thread in section.threads.all %}
         <a href="{{ thread.id }}">{{ thread.name }}</a><br>
     {% endfor %}

@@ -14,3 +14,8 @@ class LoginForm(forms.Form):
 
 class PostForm(forms.Form):
     data = forms.CharField(label='Message')
+
+
+class NewThreadForm(forms.Form):
+    name = forms.CharField(label='Thread name', max_length=30)
+
