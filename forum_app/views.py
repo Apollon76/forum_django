@@ -90,3 +90,12 @@ def thread_view(request, section_id, thread_id):
     cur_thread = Thread.objects.get(pk=thread_id)
     posts_on_page = cur_thread.posts.all().order_by('-id')
     return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(), 'posts': posts_on_page})
+
+
+@login_required(login_url='/forum_app/login')
+def delete_post(request, section_id, thread_id, post_id):
+    if request.user.is_staff:
+        cur_thread = Thread.objects.get(pk=thread_id)
+        post = Post.objects.get(pk=post_id)
+        cur_thread.posts.remove(post)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

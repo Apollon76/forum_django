@@ -13,7 +13,7 @@ class LoginForm(forms.Form):
 
 
 class PostForm(forms.Form):
-    data = forms.CharField(label='Message')
+    data = forms.CharField(label='Message', widget=forms.Textarea)
 
 
 class NewThreadForm(forms.Form):
