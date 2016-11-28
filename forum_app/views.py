@@ -53,7 +53,7 @@ def section_view(request, id):
     return render(request, 'section.html', {'section': cur_section})
 
 
-def thread_view(request, section_id, thread_id):
+def post_message(request, section_id, thread_id):
     cur_thread = Thread.objects.get(pk=thread_id)
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -61,4 +61,10 @@ def thread_view(request, section_id, thread_id):
             new_message = Post(data=form.cleaned_data['data'], author=request.user)
             new_message.save()
             cur_thread.posts.add(new_message)
-    return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm()})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def thread_view(request, section_id, thread_id):
+    cur_thread = Thread.objects.get(pk=thread_id)
+    posts_on_page = cur_thread.posts.all().order_by('-id')
+    return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(), 'posts': posts_on_page})

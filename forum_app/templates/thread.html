@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ thread.name }}</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
+
+{% block title %}{{ thread.name }}{% endblock %}
+{% block content %}
     {% if user.is_authenticated %}
-        <form action="" method="post">
+        <form action="submit/" method="post">
             {% csrf_token %}
             {{ post_form }}
             <input type="submit" value="Submit" />
         </form>
     {% endif %}
-    {% for post in thread.posts.all %}
+    {% for post in posts %}
         <a>{{ post.author.username }}</a><br>
         <a>{{ post.data }}</a><br>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
