@@ -8,13 +8,21 @@
             <a href="new_thread/">Создать новую тему</a><br>
         {% endif %}
         <div class="panel-group">
-            {% for thread in section_threads %}
+            {% for thread in page.object_list %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <a href="{{ thread.id }}">{{ thread.name }}</a>
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="panel-footer">
+            {% if page.has_previous %}
+                <a href="?page={{ page.previous_page_number }}">Назад</a>
+            {% endif %}
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}">Вперёд</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

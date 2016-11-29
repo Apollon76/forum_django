@@ -54,7 +54,11 @@ def logout_view(request):
 def section_view(request, id):
     cur_section = Section.objects.get(pk=id)
     section_threads = cur_section.threads.all().order_by('-id')
-    return render(request, 'section.html', {'section': cur_section, 'section_threads': section_threads})
+    pages = Paginator(section_threads, 10)
+    cur_page = 1
+    if 'page' in request.GET:
+        cur_page = int(request.GET['page'])
+    return render(request, 'section.html', {'section': cur_section, 'page': pages.page(cur_page)})
 
 
 @login_required(login_url='/forum_app/login')
@@ -94,11 +98,7 @@ def thread_view(request, section_id, thread_id):
     cur_page = 1
     if 'page' in request.GET:
         cur_page = int(request.GET['page'])
-    posts_number = 10
-    max_page = (len(posts_on_page) - 1) // posts_number
-    max_page = max(max_page, 0)
     return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(),
-                                           #'posts': posts_on_page[posts_number * cur_page:min(len(posts_on_page), posts_number * (cur_page + 1))],
                                            'page': pages.page(cur_page)})
 
 
