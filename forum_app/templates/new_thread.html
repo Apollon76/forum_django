@@ -1,11 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block title %}Новая тема{% endblock %}
+{% block title2 %}Новая тема{% endblock %}
 {% block content %}
     <form action="submit/" method="post">
         {% csrf_token %}
-        {{ thread_form }}
-        {{ post_form }}
+        {{ thread_form|linebreaksbr }}<br>
+        {{ post_form|linebreaksbr }}<br>
         <button type="submit" class="btn btn-success">Создать</button>
     </form>
     {% csrf_token %}

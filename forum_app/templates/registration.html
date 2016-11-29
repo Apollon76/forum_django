@@ -1,10 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block title %}Регистрация{% endblock %}
+{% block title2 %}Регистрация{% endblock %}
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form|linebreaksbr }}<br>
         <button type="submit" class="btn btn-success">Отправить</button>
     </form>
     {% csrf_token %}

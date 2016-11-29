@@ -9,6 +9,13 @@
           padding-top: 60px;
           padding-bottom: 20px;
         }
+        tr {
+            display: block;
+        }
+        tr:after {
+            content:"\a";
+            white-space: pre;
+        }
     </style>
     <title>{%  block title %}{% endblock %}</title>
 </head>
@@ -42,7 +49,11 @@
     </nav>
 
     <div class="container">
-        {% block content %}{% endblock %}
+        <div class="panel panel-default">
+
+            <div class="panel-heading">{%  block title2 %}{% endblock %}</div>
+            <div class="panel-body">{% block content %}{% endblock %}</div>
+        </div>
     </div>
 
     <footer class="footer">
