@@ -54,7 +54,8 @@ def logout_view(request):
 
 def section_view(request, id):
     cur_section = Section.objects.get(pk=id)
-    return render(request, 'section.html', {'section': cur_section})
+    section_threads = cur_section.threads.all().order_by('-id')
+    return render(request, 'section.html', {'section': cur_section, 'section_threads': section_threads})
 
 
 @login_required(login_url='/forum_app/login')

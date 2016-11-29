@@ -2,10 +2,18 @@
 
 {% block title %}{{ section.name }}{% endblock %}
 {% block content %}
-    {% if user.is_authenticated %}
-        <a href="new_thread/">Создать нову тему</a><br>
-    {% endif %}
-    {% for thread in section.threads.all %}
-        <a href="{{ thread.id }}">{{ thread.name }}</a><br>
-    {% endfor %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Разделы</div>
+        {% if user.is_authenticated %}
+            <a href="new_thread/">Создать новую тему</a><br>
+        {% endif %}
+        <div class="panel-group">
+            {% for thread in section_threads %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ thread.id }}">{{ thread.name }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
 {% endblock %}

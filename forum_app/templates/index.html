@@ -2,8 +2,14 @@
 
 {% block title %}Форум{% endblock %}
 {% block content %}
-    {% for section in sections %}
-        <a href="sections/{{ section.id }}">{{ section.name }}</a><br>
-    {% endfor %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Разделы</div>
+        <div class="panel-body">
+            {% for section in sections %}
+                <a href="sections/{{ section.id }}">{{ section.name }}</a><br>
+            {% endfor %}
+        </div>
+    </div>
+    <h5>Зарегистрированные пользователи:</h5>
     <p>{{ registered_users }}</p>
 {% endblock %}

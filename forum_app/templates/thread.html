@@ -10,11 +10,23 @@
         </form>
     {% endif %}
     {% for post in posts %}
-        <a>{{ post.author.username }}</a><br>
-        <a>{{ post.data }}</a><br>
-        {% if user.is_staff %}
-            <a href="{{ post.id }}/delete_post/">del</a><br>
-        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <p>{{ post.author.username }}</p>
+                    </div>
+                    <div class="col-sm-4">
+                        {% if user.is_staff %}
+                            <a href="{{ post.id }}/delete_post/">del</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <p>{{ post.data }}</p>
+            </div>
+        </div>
     {% endfor %}
     {% if cur_page > 0 %}
         <a href="?page={{ cur_page|add:'-1' }}">Назад</a>
