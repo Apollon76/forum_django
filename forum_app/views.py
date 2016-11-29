@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .forms import *
 from .models import Section, Thread, Post
@@ -55,10 +55,14 @@ def section_view(request, id):
     cur_section = Section.objects.get(pk=id)
     section_threads = cur_section.threads.all().order_by('-id')
     pages = Paginator(section_threads, 10)
-    cur_page = 1
-    if 'page' in request.GET:
-        cur_page = int(request.GET['page'])
-    return render(request, 'section.html', {'section': cur_section, 'page': pages.page(cur_page)})
+    page_number = request.GET.get('page')
+    try:
+        cur_page = pages.page(page_number)
+    except PageNotAnInteger:
+        cur_page = pages.page(1)
+    except EmptyPage:
+        cur_page = pages.page(pages.num_pages)
+    return render(request, 'section.html', {'section': cur_section, 'page': cur_page})
 
 
 @login_required(login_url='/forum_app/login')
@@ -94,12 +98,16 @@ def post_message(request, section_id, thread_id):
 def thread_view(request, section_id, thread_id):
     cur_thread = Thread.objects.get(pk=thread_id)
     posts_on_page = cur_thread.posts.all().order_by('-id')
+    page_number = request.GET.get('page')
     pages = Paginator(posts_on_page, 10)
-    cur_page = 1
-    if 'page' in request.GET:
-        cur_page = int(request.GET['page'])
+    try:
+        cur_page = pages.page(page_number)
+    except PageNotAnInteger:
+        cur_page = pages.page(1)
+    except EmptyPage:
+        cur_page = pages.page(pages.num_pages)
     return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(),
-                                           'page': pages.page(cur_page)})
+                                           'page': cur_page})
 
 
 @login_required(login_url='/forum_app/login')
