@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -124,6 +124,14 @@ def delete_post(request, section_id, thread_id, post_id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
+@login_required(login_url='/forum_app/login')
+def delete_profile(request, user_id):
+    if request.user.is_staff or request.user.id == int(user_id):
+        cur_user = User.objects.get(pk=user_id)
+        cur_user.delete()
+    return HttpResponseRedirect('../../')
+
+
 def profile(request, user_id):
-    cur_user = User.objects.get(pk=user_id)
-    return render(request, 'profile.html', {'user': cur_user})
+    cur_user = get_object_or_404(User, id=user_id)
+    return render(request, 'profile.html', {'cur_user': cur_user})

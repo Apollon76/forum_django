@@ -1,7 +1,14 @@
 {% extends "base_generic.html" %}
 
-{% block title %}{{ user.username }}{% endblock %}
-{% block title2 %}{{ user.username }}{% endblock %}
+{% block title %}{{ cur_user.username }}{% endblock %}
+{% block title2 %}{{ cur_user.username }}{% endblock %}
 {% block content %}
-    <p>{{ user.username }}</p>
+    {% if cur_user == None %}
+        <p>Такого пользователя нет.</p>
+    {% else %}
+        <p>{{ cur_user.username }}</p>
+        {% if user.is_staff or cur_user.id == user.id %}
+            <a href="{% url 'delete_profile' user_id=cur_user.id %}">Удалить профиль</a><br>
+        {% endif %}
+    {% endif %}
 {% endblock %}
