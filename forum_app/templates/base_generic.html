@@ -36,6 +36,9 @@
                 <form class="navbar-form navbar-right" action="{% url 'logout' %}">
                     <button type="submit" class="btn btn-success navbar-right">Выйти</button>
                 </form>
+                <form class="navbar-form navbar-right" action="{% url 'profile' user_id=user.id %}">
+                    <button type="submit" class="btn btn-success navbar-right">Профиль</button>
+                </form>
             {% else %}
                 <form class="navbar-form navbar-right" action="{% url 'login' %}">
                     <input type="hidden" value="{{ request.get_full_path|urlencode }}" name="prev_page">
@@ -60,7 +63,6 @@
     <footer class="footer">
       <div class="container">
           <a href="{% url 'index' %}">На главную</a><br>
-          <!--<p class="text-muted">Place sticky footer content here.</p>-->
       </div>
     </footer>
 </body>

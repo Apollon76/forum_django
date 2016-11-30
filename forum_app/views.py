@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -52,7 +53,7 @@ def login_page(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect('../')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def section_view(request, id):
@@ -121,3 +122,8 @@ def delete_post(request, section_id, thread_id, post_id):
         cur_thread = Thread.objects.get(pk=thread_id)
         cur_thread.posts.remove(post)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def profile(request, user_id):
+    cur_user = User.objects.get(pk=user_id)
+    return render(request, 'profile.html', {'user': cur_user})
