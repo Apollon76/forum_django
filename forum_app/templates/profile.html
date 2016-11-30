@@ -7,6 +7,10 @@
         <p>Такого пользователя нет.</p>
     {% else %}
         <p>{{ cur_user.username }}</p>
+        <p>E-mail: {{ cur_user.email }}</p>
+        {% if user.is_staff %}
+            <p><b>Админ</b></p>
+        {% endif %}
         {% if user.is_staff or cur_user.id == user.id %}
             <a href="{% url 'delete_profile' user_id=cur_user.id %}">Удалить профиль</a><br>
         {% endif %}
