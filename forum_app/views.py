@@ -39,7 +39,11 @@ def login_page(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect('../')
+            prev_page = request.GET.get('prev_page')
+            if prev_page is None:
+                return HttpResponseRedirect('../')
+            else:
+                return HttpResponseRedirect(prev_page)
         else:
             return render(request, 'login.html', {'error_message': 'Incorrect username or password.'})
     login_form = LoginForm()
@@ -112,8 +116,8 @@ def thread_view(request, section_id, thread_id):
 
 @login_required(login_url='/forum_app/login')
 def delete_post(request, section_id, thread_id, post_id):
-    if request.user.is_staff:
+    post = Post.objects.get(pk=post_id)
+    if request.user.is_staff or post.author == request.user:
         cur_thread = Thread.objects.get(pk=thread_id)
-        post = Post.objects.get(pk=post_id)
         cur_thread.posts.remove(post)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

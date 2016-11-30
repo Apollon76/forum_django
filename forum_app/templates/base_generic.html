@@ -38,6 +38,7 @@
                 </form>
             {% else %}
                 <form class="navbar-form navbar-right" action="{% url 'login' %}">
+                    <input type="hidden" value="{{ request.get_full_path|urlencode }}" name="prev_page">
                     <button type="submit" class="btn btn-success navbar-right">Войти</button>
                 </form>
                  <form class="navbar-form navbar-right" action="{% url 'registration' %}">

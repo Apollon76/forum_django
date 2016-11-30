@@ -22,7 +22,7 @@
                         {% endif %}
                     </div>
                     <div class="col-sm-4">
-                        {% if user.is_staff %}
+                        {% if user.is_staff or post.author == user %}
                             <a href="{{ post.id }}/delete_post/">del</a>
                         {% endif %}
                     </div>
