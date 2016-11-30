@@ -5,8 +5,8 @@
 {% block content %}
     <form action="submit/" method="post">
         {% csrf_token %}
-        {{ thread_form|linebreaksbr }}<br>
-        {{ post_form|linebreaksbr }}<br>
+        {{ thread_form }}<br>
+        {{ post_form }}<br>
         <button type="submit" class="btn btn-success">Создать</button>
     </form>
     {% csrf_token %}

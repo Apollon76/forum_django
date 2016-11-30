@@ -25,7 +25,7 @@ def registration(request):
             if not User.objects.filter(username=form.cleaned_data['nickname']).exists():
                 new_user = User.objects.create_user(form_data['nickname'], form_data['email'], form_data['password'])
                 new_user.save()
-                return HttpResponseRedirect('../')
+                return HttpResponseRedirect(reverse('index'))
             else:
                 return render(request, 'registration.html', {'form': RegistrationForm(),
                                                              'error_message': 'User with this nickname has already been registered.'})
@@ -42,7 +42,7 @@ def login_page(request):
             login(request, user)
             prev_page = request.GET.get('prev_page')
             if prev_page is None:
-                return HttpResponseRedirect('../')
+                return HttpResponseRedirect(reverse('index'))
             else:
                 return HttpResponseRedirect(prev_page)
         else:
@@ -81,7 +81,7 @@ def post_new_thread(request, section_id):
         new_thread.save()
         cur_section.threads.add(new_thread)
         post_message(request, section_id, new_thread.id)
-        return HttpResponseRedirect('../../')
+        return HttpResponseRedirect(reverse('thread', kwargs={'section_id': section_id, 'thread_id': new_thread.id}))
 
 
 @login_required(login_url='/forum_app/login')
@@ -129,7 +129,7 @@ def delete_profile(request, user_id):
     if request.user.is_staff or request.user.id == int(user_id):
         cur_user = User.objects.get(pk=user_id)
         cur_user.delete()
-    return HttpResponseRedirect('../../')
+    return HttpResponseRedirect(reverse('index'))
 
 
 def profile(request, user_id):
