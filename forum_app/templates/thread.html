@@ -15,7 +15,11 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-8">
-                        <p>{{ post.author.username }}</p>
+                        {% if post.author == None %}
+                            <p>DELETED</p>
+                        {% else %}
+                            <p>{{ post.author.username }}</p>
+                        {% endif %}
                     </div>
                     <div class="col-sm-4">
                         {% if user.is_staff %}

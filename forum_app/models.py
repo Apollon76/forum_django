@@ -9,9 +9,9 @@ class Post(models.Model):
 
 class Thread(models.Model):
     name = models.CharField(max_length=100)
-    posts = models.ManyToManyField(Post)
+    posts = models.ManyToManyField(Post, blank=True)
 
 
 class Section(models.Model):
     name = models.CharField(max_length=100)
-    threads = models.ManyToManyField(Thread)
+    threads = models.ManyToManyField(Thread, blank=True)
