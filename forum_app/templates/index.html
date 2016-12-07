@@ -2,6 +2,16 @@
 
 {% block title %}Форум{% endblock %}
 {% block content %}
+    <script>
+        function reload_new_theme() {
+            $.getJSON("{% url 'recently_created_thread' %}", {}, function(data) {
+                $('#new_theme')
+                        .html('<h5>Новая тема:</h5><p><a href="' + data.link + '" id="new_theme">' + data.name + '</a></p>');
+            });
+        }
+        var interval = self.setInterval(function(){ reload_new_theme(); }, 3000);
+        $('document').ready(reload_new_theme);
+    </script>
     <div class="panel panel-default">
         <div class="panel-heading">Разделы</div>
         <div class="panel-body">
@@ -10,6 +20,7 @@
             {% endfor %}
         </div>
     </div>
+    <div id='new_theme'></div>
     <h5>Зарегистрированные пользователи:</h5>
     <p>{{ registered_users }}</p>
 {% endblock %}

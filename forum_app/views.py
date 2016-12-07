@@ -1,11 +1,12 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import json
 
 from .forms import *
 from .models import Section, Thread, Post
@@ -113,6 +114,18 @@ def thread_view(request, section_id, thread_id):
         cur_page = pages.page(pages.num_pages)
     return render(request, 'thread.html', {'thread': cur_thread, 'post_form': PostForm(),
                                            'page': cur_page})
+
+
+def recently_created_thread(request):
+    cur_thread = Thread.objects.latest('id')
+    if cur_thread is None:
+        return JsonResponse({})
+    cur_section = Section.objects.filter(threads__id=cur_thread.id)
+    if not cur_section.exists():
+        return JsonResponse({})
+    cur_section = cur_section[0]
+    return JsonResponse({'link': reverse('thread', kwargs={'section_id': cur_section.id, 'thread_id': cur_thread.id}),
+                         'name': cur_thread.name, })
 
 
 @login_required(login_url='/forum_app/login')
