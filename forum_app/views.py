@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import json
+from django.core.mail import send_mail
 
 from .forms import *
 from .models import Section, Thread, Post
@@ -23,13 +23,23 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            if not User.objects.filter(username=form.cleaned_data['nickname']).exists():
+            if not User.objects.filter(username=form.cleaned_data['nickname']).exists() and \
+                    not User.objects.filter(email=form.cleaned_data['email']).exists():
                 new_user = User.objects.create_user(form_data['nickname'], form_data['email'], form_data['password'])
                 new_user.save()
+                '''
+                send_mail(
+                    'Добро пожаловать',
+                    'Here is the message.',
+                    'Apollon76@yandex.ru',
+                    [form_data['email']],
+                    fail_silently=False,
+                )
+                '''
                 return HttpResponseRedirect(reverse('index'))
             else:
                 return render(request, 'registration.html', {'form': RegistrationForm(),
-                                                             'error_message': 'User with this nickname has already been registered.'})
+                                                             'error_message': 'User with this nickname or e-mail has already been registered.'})
     else:
         form = RegistrationForm()
 
