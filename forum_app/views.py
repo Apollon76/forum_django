@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail
+import requests
 
 from .forms import *
 from .models import Section, Thread, Post
@@ -23,11 +24,17 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
+            captcha_response = requests.post('https://www.google.com/recaptcha/api/siteverify',
+                                             data={'secret': '6LefKg4UAAAAAAbdb0hUqltKzltUFXjrgNYCX5mt',
+                                                   'response': request.POST['g-recaptcha-response']}).json()
+            if not captcha_response['success']:
+                return render(request, 'registration.html', {'form': RegistrationForm(),
+                                                             'error_message': 'Неправильно введена каптча'})
             if not User.objects.filter(username=form.cleaned_data['nickname']).exists() and \
                     not User.objects.filter(email=form.cleaned_data['email']).exists():
                 new_user = User.objects.create_user(form_data['nickname'], form_data['email'], form_data['password'])
                 new_user.save()
-                '''
+                '''exceeded
                 send_mail(
                     'Добро пожаловать',
                     'Here is the message.',
